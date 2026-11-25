@@ -4,10 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Videojuegos</title>
+    <link rel="stylesheet" href="css/estilos.css">
     <script src="js/app.js" defer></script>
   </head>
   <body>
-    <h1>Videojuegos</h1>
-    <p>Mi lista de videojuegos. Abre la consola para ver y probar las funciones.</p>
+    <header>
+      <h1 id="titulo">Videojuegos</h1>
+      <p>Mi colección personal de videojuegos.</p>
+    </header>
+    <section id="controles">
+      <label for="buscador">Buscar por título o género:</label>
+      <input id="buscador" type="search" placeholder="Buscar videojuegos">
+      <button id="ordenTitulo" type="button">Ordenar por título</button>
+      <button id="ordenHoras" type="button">Ordenar por horas jugadas</button>
+    </section>
+    <p id="resumen"></p>
+    <p id="estadisticas"></p>
+    <main id="listado"></main>
   </body>
 </html>

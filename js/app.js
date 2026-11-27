@@ -347,6 +347,26 @@ function pintarEstadisticas(lista) {
     `Más horas: ${resultado.juegoConValorMaximo.titulo} (${resultado.maximo})`;
 }
 
+let textoBuscado = "";
+let criterio = "ninguno";
+
+function actualizar() {
+  const juegosEncontrados = buscarPorTexto(juegos, textoBuscado);
+  const juegosOrdenados = ordenar(juegosEncontrados, criterio);
+  const resumen = document.querySelector("#resumen");
+
+  pintar(juegosOrdenados);
+
+  if (juegosOrdenados.length === 0) {
+    resumen.textContent =
+      `No hay resultados. Mostrando 0 de ${juegos.length} videojuegos.`;
+    return;
+  }
+
+  resumen.textContent =
+    `Mostrando ${juegosOrdenados.length} de ${juegos.length} videojuegos.`;
+}
+
 // En el navegador, deja disponibles los datos y funciones para otros scripts.
 if (typeof window !== "undefined") {
   Object.assign(window, {
@@ -362,7 +382,8 @@ if (typeof window !== "undefined") {
     estadisticas,
     crearTarjeta,
     pintar,
-    pintarEstadisticas
+    pintarEstadisticas,
+    actualizar
   });
 }
 
@@ -394,12 +415,24 @@ estadisticas(juegos, "valoracion");
 
 if (typeof document !== "undefined") {
   const buscador = document.querySelector("#buscador");
+  const botonOrdenTitulo = document.querySelector("#ordenTitulo");
+  const botonOrdenHoras = document.querySelector("#ordenHoras");
 
   buscador.addEventListener("input", () => {
-    const juegosEncontrados = buscarPorTexto(juegos, buscador.value);
-    pintar(juegosEncontrados);
+    textoBuscado = buscador.value;
+    actualizar();
   });
 
-  pintar(juegos);
+  botonOrdenTitulo.addEventListener("click", () => {
+    criterio = "titulo";
+    actualizar();
+  });
+
+  botonOrdenHoras.addEventListener("click", () => {
+    criterio = "horasJugadas";
+    actualizar();
+  });
+
   pintarEstadisticas(juegos);
+  actualizar();
 }

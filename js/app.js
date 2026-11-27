@@ -210,6 +210,24 @@ function buscarPorTexto(lista, texto) {
   );
 }
 
+function ordenar(lista, criterio) {
+  const copia = [...lista];
+
+  if (criterio === "titulo") {
+    copia.sort((juegoA, juegoB) =>
+      juegoA.titulo.localeCompare(juegoB.titulo)
+    );
+  } else if (criterio === "horasJugadas") {
+    copia.sort((juegoA, juegoB) =>
+      juegoA.horasJugadas - juegoB.horasJugadas
+    );
+  } else if (criterio !== "ninguno") {
+    throw new RangeError("El criterio de ordenación no es válido.");
+  }
+
+  return copia;
+}
+
 // SESION 8, RETO 2: asignar el siguiente id, añadir el juego y devolver el id.
 function anadir(lista, juego) {
   // Encuentra el id mayor y calcula el siguiente.
@@ -338,6 +356,7 @@ if (typeof window !== "undefined") {
     filtrarJuegos,
     contarPorGenero,
     buscarPorTexto,
+    ordenar,
     anadir,
     eliminarPorId,
     estadisticas,
@@ -374,6 +393,13 @@ console.log("\nEstadisticas de valoracion:");
 estadisticas(juegos, "valoracion");
 
 if (typeof document !== "undefined") {
+  const buscador = document.querySelector("#buscador");
+
+  buscador.addEventListener("input", () => {
+    const juegosEncontrados = buscarPorTexto(juegos, buscador.value);
+    pintar(juegosEncontrados);
+  });
+
   pintar(juegos);
   pintarEstadisticas(juegos);
 }

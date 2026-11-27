@@ -290,6 +290,45 @@ function estadisticas(lista, campo = "horasJugadas") {
   return { total, media, maximo, juegoConValorMaximo };
 }
 
+function crearTarjeta(juego) {
+  const tarjeta = document.createElement("article");
+  tarjeta.classList.add("tarjeta");
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = juego.titulo;
+
+  const datos = document.createElement("p");
+  datos.textContent =
+    `${juego.genero} · ${juego.plataforma} · ${juego.horasJugadas} horas`;
+
+  tarjeta.append(titulo, datos);
+  return tarjeta;
+}
+
+function pintar(lista) {
+  const listado = document.querySelector("#listado");
+  listado.replaceChildren();
+
+  for (const juego of lista) {
+    listado.append(crearTarjeta(juego));
+  }
+}
+
+function pintarEstadisticas(lista) {
+  const elementoEstadisticas = document.querySelector("#estadisticas");
+  const resultado = estadisticas(lista);
+
+  if (resultado === null) {
+    elementoEstadisticas.textContent = "No hay estadísticas disponibles.";
+    return;
+  }
+
+  elementoEstadisticas.textContent =
+    `Horas totales: ${resultado.total} · ` +
+    `Media: ${resultado.media.toFixed(1)} · ` +
+    `Más horas: ${resultado.juegoConValorMaximo.titulo} (${resultado.maximo})`;
+}
+
 // En el navegador, deja disponibles los datos y funciones para otros scripts.
 if (typeof window !== "undefined") {
   Object.assign(window, {
@@ -301,7 +340,10 @@ if (typeof window !== "undefined") {
     buscarPorTexto,
     anadir,
     eliminarPorId,
-    estadisticas
+    estadisticas,
+    crearTarjeta,
+    pintar,
+    pintarEstadisticas
   });
 }
 
@@ -330,3 +372,8 @@ console.log("\nEstadisticas de horas jugadas:");
 estadisticas(juegos);
 console.log("\nEstadisticas de valoracion:");
 estadisticas(juegos, "valoracion");
+
+if (typeof document !== "undefined") {
+  pintar(juegos);
+  pintarEstadisticas(juegos);
+}
